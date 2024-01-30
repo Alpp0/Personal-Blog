@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
+    <style>
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        overflow-x: hidden; /* Yatay kaydırmayı engelle */
+      }
+
+      .sidebar {
+        background-color: #f8f9fa; /* Sol taraftaki arka plan rengi */
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+      }
+
+      .sidebar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* Fotoğrafın oranlarını koru ve taşan kısımları kırp */
+      }
+
+      .content {
+        margin-left: 33.33%; /* Sol taraftaki 1/3'lük kısım kadar içeriği kaydır */
+        padding: 20px;
+        position: relative; /* .content içindeki pozisyonu kontrol etmek için */
+      }
+
+      .logo {
+        position: fixed;
+        top: -30px;
+        left: -34px;
+        z-index: 1; /* Diğer içeriklerin üzerinde kalmasını sağlar */
+        width: 300px;
+        height: auto;
+        cursor: pointer;
+      }
+
+      .button-container {
+        position: fixed;
+        top: 50%;
+        left: 10%;
+        transform: translate(-50%, -50%);
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+      }
+
+      .button {
+        background-color: transparent; /* Arkası saydam */
+        color: #000000; /* Yazı rengi beyaz */
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        border: none;
+        position: relative;
+        overflow: hidden;
+        font-size: 20px; /* Yazı stili büyüklüğü */
+        font-family: "Monaco", monospace; /* Monospace Monaco fontu */
+      }
+
+      .button:hover {
+        background-color: transparent;
+        color: #fff;
+      }
+
+      .button::before,
+      .button::after {
+        content: "";
+        position: absolute;
+        width: 0;
+        height: 2px;
+        background: #fff;
+        transition: width 0.3s ease;
+      }
+
+      .button::before {
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      .button::after {
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      .button:hover::before,
+      .button:hover::after {
+        width: 50%;
+      }
+
+      .social-icons {
+        position: fixed;
+        top: 75%;
+        left: 10%;
+        transform: translate(-50%, -50%);
+        display: flex;
+        gap: 20px;
+      }
+      .social-icon {
+        font-size: 30px;
+        color: #000000; /* Sosyal medya ikon rengi */
+        cursor: pointer;
+      }
+
+      .social-icon:hover {
+        color: #fff; /* Hover rengi */
+      }
+      .alp {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 150px; /* Ayarladığınız genişlik */
+        height: 150px; /* Ayarladığınız yükseklik */
+        object-fit: cover; /* Fotoğrafın oranlarını koru ve taşan kısımları kırp */
+        border-radius: 50%; /* Köşeleri yuvarlak yapar */
+        cursor: pointer;
+      }
+      .yazi {
+        margin-top: 100px;
+        margin-left: -100px;
+        width: 100%;
+        height: auto;
+        text-align: center;
+        line-height: 35px;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+      }
+      .yazi1 {
+        margin-top: 70px;
+        margin-left: -100px;
+        width: 100%;
+        height: auto;
+        text-align: center;
+        line-height: 35px;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+      }
+      .yazi2 {
+        margin-top: 40px;
+        margin-left: -100px;
+        width: 100%;
+        height: auto;
+        text-align: center;
+        line-height: 35px;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+      }
+      .yazi3 {
+        margin-top: 10px;
+        margin-left: -100px;
+        width: 100%;
+        height: auto;
+        text-align: center;
+        line-height: 35px;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+      }
+      .yazi4 {
+        margin-top: 10px;
+        margin-left: -100px;
+        width: 100%;
+        height: auto;
+        text-align: center;
+        line-height: 35px;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+      }
+      .yazi5 {
+        margin-top: 10px;
+        margin-left: -100px;
+        width: 100%;
+        height: auto;
+        text-align: center;
+        line-height: 35px;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+      }
+      .yazi6 {
+            
+
+      }
+       /* Dil Değiştirme Butonu Stilleri */
+.language-button {
+    background-color: transparent;
+    color: #000;
+    border: 2px solid #000;
+    padding: 12px 20px; /* Yükseklik biraz artırıldı */
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, width 0.3s ease; /* Genişleme efekti için width özelliği eklendi */
+    display: inline-block;
+    position: fixed;
+    top: 100px;
+    right: 20px;
+    overflow: hidden;
+}
+
+.language-button span::before,
+.language-button span::after {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 2px;
+    background: #000;
+    transition: width 0.3s ease;
+}
+
+.language-button span::before {
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+}
+
+.language-button span::after {
+    bottom: 50%;
+    right: 0;
+    transform: translateY(50%);
+}
+
+.language-button:hover span::before,
+.language-button:hover span::after {
+    width: 50%;
+}
+
+.language-button.active span::before,
+.language-button.active span::after {
+    width: 50%;
+}
+
+.language-button:hover {
+    background-color: #000;
+    color: #fff;
+}
+
+.language-button.active {
+    background-color: #000;
+    color: #fff;
+    border-color: #fff;
+}
+
+
+/* Ekran boyutlarına göre responsive ayarlar */
+@media only screen and (max-width: 1200px) {
+    .sidebar {
+        width: 20%; /* 1/5'lik kısım */
+    }
+
+    .content {
+        margin-left: 20%; /* 1/5'lik kısım kadar içeriği kaydır */
+    }
+}
+
+@media only screen and (max-width: 992px) {
+    .sidebar {
+        width: 50%; /* 1/2'lik kısım */
+    }
+
+    .content {
+        margin-left: 50%; /* 1/2'lik kısım kadar içeriği kaydır */
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .sidebar {
+        width: 100%; /* Tam genişlik */
+    }
+
+    .content {
+        margin-left: 0;
+    }
+}
+/* 500 piksel ve altında ekran genişliği için responsive ayarlar */
+@media only screen and (max-width: 500px) {
+    .sidebar {
+        width: 100%; /* Tam genişlik */
+    }
+
+    .content {
+        margin-left: 0;
+    }
+
+    .button-container {
+        left: 5%; /* Butonların sola kayması */
+    }
+}
+.toggle-button {
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        position: fixed;
+        top: 105px;
+        right: -40px;
+      }
+
+      .bulb-icon {
+        width: 40px;
+        height: auto;
+        transition: transform 0.3s ease;
+      }
+
+      .dark-mode .bulb-icon {
+        transform: rotate(180deg);
+      }
+  /* Koyu Mod Stilleri */
+.dark-mode {
+    background-color: #000000; /* Koyu mod arka plan rengi */
+    color: #fff; /* Koyu mod metin rengi */
+}
+
+.dark-mode .sidebar {
+    background-color: #444; /* Koyu mod sol taraftaki arka plan rengi */
+}
+
+.dark-mode .button {
+    color: #fff; /* Koyu mod buton metin rengi */
+}
+
+/* Başlık Stilleri */
+.title1,
+.title2,
+.title3,
+.title4 {
+    color: #000000; /* Başlık metin rengi */
+    margin-bottom: 20px; /* Başlık alt boşluğu */
+}
+
+/* Koyu Mod Başlık Stilleri */
+.dark-mode .title1,
+.dark-mode .title2,
+.dark-mode .title3,
+.dark-mode .title4 {
+    color: #fff; /* Koyu modda başlık metin rengi */
+}
+
+    </style>
+    <title>Alp Eren KIRGİLBOĞA | EĞİTİM</title>
+    <link rel="icon" href="logo.ico" type="image/x-icon" />
+
+  </head>
+  <body>
+    <div class="sidebar">
+      <!-- Sol taraftaki fotoğraf burada olacak -->
+      <img src="banner.jpg" alt="Profil Fotoğrafı" class="img-fluid" />
+    </div>
+    <div class="button-container">
+      <p class="yazi6" style="margin-left: 17%" >Kişisel Blog</p>
+      <a href="index.html" class="button about-button">Hakkımda</a>
+      <a href="egitim.html" class="button education-button">Eğitim</a>
+      <a href="iletisim.html" class="button contact-button">İletişim</a>
+    </div>
+
+    <div class="content">
+      <!-- Blog içeriği burada olacak -->
+      <a href="index.html">
+        <img src="logo.png" alt="Profil Fotoğrafı" class="logo" />
+      </a>
+      <h1
+      class="title1"
+        style="
+          font-family: 'Arial', sans-serif;
+          font-size: 66px;
+          color: #333;
+          margin-top: 70px;
+          margin-bottom: 10px;
+          margin-left: 27%;
+        "
+      >
+        Eğitim
+      </h1>
+
+      <p class="yazi">
+        İlkokulu İstanbulun Sefaköy ilçesinde, ortaokulu Adana Çukurovada,
+        Liseyi ise İstanbulun Beykoz ilçesinde okudum. Lise 1,2 ve 3.sınıfın
+        yarı dönemine kadar Fevzi Çakmak Anadolu Lisesinde okudum, lise 3 ün 2.
+        yarısında Beykoz Anadolu Lisesine geçiş yaptım ve Beykoz Anadolu
+        Lisesinden mezunum. Şuan ise Eskişehir Osmangazi üniversitesi PC
+        programcılığı bölümünde eğitim görmekteyim.
+      </p>
+      <h1
+      class="title2"
+        style="
+          font-family: 'Arial', sans-serif;
+          font-size: 50px;
+          margin-left: 300px;
+          color: #333;
+          margin-top: 60px;
+          margin-bottom: 10px;
+        "
+      >
+        Staj
+      </h1>
+      <p class="yazi1">
+        10.07.2023 ile 18.08.2023 tarihleri arasında Türkiye Vakıflar Bankasında
+        30 iş günü staj yaptım. Staj dönemimi başarıyla bitirdim.
+      </p>
+      <h1
+      class="title3"
+        style="
+          font-family: 'Arial', sans-serif;
+          font-size: 50px;
+          margin-left: 250px;
+          color: #333;
+          margin-top: 35px;
+          margin-bottom: 10px;
+        "
+      >
+        Hedeflerim
+      </h1>
+      <p class="yazi2">
+        Şuan için tek bir hedefim var o da DGS. DGS sınavına girerek Bilgisayar
+        ya da Yazılım Mühendisliğini kazanmak. Kazandıktan sonra profesyonel
+        şekilde kick box'a başlamak istiyorum. Üniversiteye yerleştikten sonra
+        ise iş ilanlarına başvurmak istiyorum ve part-time şekilde bölümümle
+        alakalı çalışmak istiyorum.
+      </p>
+      <h1
+      class="title4"
+        style="
+          font-family: 'Arial', sans-serif;
+          font-size: 50px;
+          margin-left: 200px;
+          color: #333;
+          margin-top: 35px;
+          margin-bottom: 10px;
+        "
+      >
+        Akademik Bilgiler
+      </h1>
+      <p class="yazi3" style="margin-top: 5%;">
+        Şuana kadar okul tarafından bize gösterilen diller:
+    <ul style="margin-left: 19%;">
+        <li>Python</li>
+        <li>C#</li>
+        <li>HTML</li>
+        <li>CSS</li>
+        <li>React</li>
+        <li>MySQL</li>
+        <li>php</li>
+    </ul>
+
+   <p class="yazi4" style="margin-top: 10%;">Bunların yanında kendime kattıklarım ise şunlardır:</p>
+    <ul style="margin-left: 19%;"> 
+        <li>Bootstrap</li>
+        <li>Javascript</li>
+    </ul>
+
+    <p class="yazi5" style="margin-top: 15%; margin-left: -200px;">Öğrendiğim Uygulamalar:</p>
+    <ul style="margin-left: 19%;">
+        <li>Photoshop</li>
+        <li>SPSS</li>
+        <li>Microsoft Visio</li>
+        <li>Microsoft Excel</li>
+        <li>Visual Studio</li>
+    </ul>
+</p>
+    </div>
+
+    <div class="social-icons">
+      <a href="https://www.instagram.com/alpkrglbga/" target="_blank">
+        <i class="fab fa-instagram social-icon" title="Instagram"></i>
+      </a>
+      <a href="https://www.linkedin.com/in/alp-eren0" target="_blank">
+        <i class="fab fa-linkedin social-icon" title="LinkedIn"></i>
+      </a>
+      <a href="https://github.com/Alpp0" target="_blank">
+        <i class="fab fa-github social-icon" title="GitHub"></i>
+      </a>
+      <!-- Diğer sosyal medya ikonları buraya eklenir -->
+      <a href="https://twitter.com/alperenkrglbga" target="_blank">
+        <i class="fas fa-times social-icon" title="X"></i>
+      </a>
+      <button class="language-button" onclick="toggleLanguage()">TR</button>
+      <button class="toggle-button" onclick="toggleDarkMode()">
+        <img src="light-bulb.ico" alt="Bulb" class="bulb-icon" />
+      </button>
+    </div>
+    <img src="alp.jpg" alt="Alp" class="alp" />
+    <script>
+      var darkMode = false;
+  
+      function toggleDarkMode() {
+          darkMode = !darkMode;
+  
+          document.body.classList.toggle("dark-mode", darkMode);
+          updateToggleButton();
+      }
+  
+      function updateToggleButton() {
+          var bulbIcon = document.querySelector(".bulb-icon");
+          bulbIcon.style.transform = darkMode ? "rotate(180deg)" : "rotate(0deg)";
+      }
+  </script>
+  
+    <script>
+      // Koyu Mod Durumunu İzleyen Değişken
+      var darkMode = false;
+
+      function toggleDarkMode() {
+        // Koyu Mod Durumunu Değiştir
+        darkMode = !darkMode;
+
+        // Body Elementine Koyu Mod Sınıfını Ekle veya Kaldır
+        document.body.classList.toggle("dark-mode", darkMode);
+
+        // Koyu Mod Butonunu Güncelle
+        updateDarkModeButton();
+      }
+
+      function updateDarkModeButton() {
+        // Koyu Mod Butonunun Metnini Güncelle
+        var buttonText = darkMode ? "Light Mode" : "Dark Mode";
+        document.querySelector(".dark-mode-button").textContent = buttonText;
+      }
+    </script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+      var turkishContent = {
+        yazi: "İlkokulu İstanbulun Sefaköy ilçesinde, ortaokulu Adana Çukurovada, Liseyi ise İstanbulun Beykoz ilçesinde okudum. Lise 1,2 ve 3.sınıfın yarı dönemine kadar Fevzi Çakmak Anadolu Lisesinde okudum, lise 3 ün 2. yarısında Beykoz Anadolu Lisesine geçiş yaptım ve Beykoz Anadolu Lisesinden mezunum. Şuan ise Eskişehir Osmangazi üniversitesi PC programcılığı bölümünde eğitim görmekteyim.",
+        yazi1:
+          "10.07.2023 ile 18.08.2023 tarihleri arasında Türkiye Vakıflar Bankasında 30 iş günü staj yaptım. Staj dönemimi başarıyla bitirdim.",
+        yazi2:
+          "Şuan için tek bir hedefim var o da DGS. DGS sınavına girerek Bilgisayar ya da Yazılım Mühendisliğini kazanmak. Kazandıktan sonra profesyonel şekilde kick box'a başlamak istiyorum. Üniversiteye yerleştikten sonra ise iş ilanlarına başvurmak istiyorum ve part-time şekilde bölümümle alakalı çalışmak istiyorum.",
+        yazi3:
+          "Şuana kadar okul tarafından bize gösterilen diller:   ",
+          yazi4:
+          "Bunların yanında kendime kattıklarım ise şunlardır:",
+          yazi5:
+          "Öğrendiğim Uygulamalar:",
+          yazi6:
+          "Kişisel Blog",
+          
+          
+        title1: "Eğitim",
+        title2: "Staj",
+        title3: "Hedeflerim",
+        title4: "Akademik Bilgiler",
+      };
+
+      var englishContent = {
+        yazi: " I attended primary school in the district of Sefaköy in Istanbul, followed by middle school in Çukurova, Adana. For high school, I studied in Beykoz, Istanbul. I spent the first half of my first, second, and third years at Fevzi Çakmak Anatolian High School, and in the second half of my third year, I transferred to Beykoz Anatolian High School, from which I graduated. Currently, I am pursuing my education in the Computer Programming department at Eskişehir Osmangazi University.",
+        yazi1:
+          "I interned at Türkiye Vakıflar Bankası (Turkey Foundations Bank) for 30 business days from July 10, 2023, to August 18, 2023. I successfully completed my internship period.",
+        yazi2:
+          "Currently, I have only one goal, and that is the DGS (Vertical Transfer Exam). I aim to enter the DGS exam to gain admission to Computer Engineering or Software Engineering. After succeeding, I want to start kickboxing professionally. Once enrolled in university, I plan to apply for job opportunities and work part-time in a field related to my major.",
+        yazi3:
+        "The languages introduced to us by the school so far:",
+          yazi4:
+          "In addition, here are the skills and experiences I have acquired:",
+          yazi5:
+          "Software Proficiencies: ",
+          yazi6: "Personal Blog ",
+
+        title1: "Education",
+        title2: "İnternship",
+        title3: "My goals",
+        title4: "Academic Information",
+      };
+
+      var language = "turkish"; // Başlangıçta Türkçe dilini kullan
+
+      function toggleLanguage() {
+        // Dil değiştirme fonksiyonu
+        if (language === "turkish") {
+    applyLanguage(englishContent);
+    language = "english";
+  } else {
+    applyLanguage(turkishContent);
+    language = "turkish";
+  }
+
+      }
+
+      function applyLanguage(content) {
+        // İlgili dildeki metinleri güncelle
+        $(".yazi").text(content.yazi);
+        $(".yazi1").text(content.yazi1);
+        $(".yazi2").text(content.yazi2);
+        $(".yazi3").text(content.yazi3);
+        $(".yazi4").text(content.yazi4);
+        $(".yazi5").text(content.yazi5);
+        $(".yazi6").text(content.yazi6);
+
+
+        // Başlıkları güncelle
+        $(".title1").text(content.title1);
+        $(".title2").text(content.title2);
+        $(".title3").text(content.title3);
+        $(".title4").text(content.title4);
+
+        // Dil değiştirme butonlarını güncelle
+  $(".about-button").text(
+    language === "turkish" ? "About Me" : "Hakkımda"
+  );
+  $(".education-button").text(
+    language === "turkish" ? "Education" : "Eğitim"
+  );
+  $(".contact-button").text(
+    language === "turkish" ? "Contact" : "İletişim"
+  );
+
+  // Dil değiştirme butonunu güncelle
+  $(".language-button").text(language.toUpperCase());
+      }
+      
+    </script>
+  </body>
+</html>

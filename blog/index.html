@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
+    <style>
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        overflow-x: hidden; /* Yatay kaydırmayı engelle */
+      }
+
+      .sidebar {
+        background-color: #f8f9fa; /* Sol taraftaki arka plan rengi */
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+      }
+
+      .sidebar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* Fotoğrafın oranlarını koru ve taşan kısımları kırp */
+      }
+
+      .content {
+        margin-left: 33.33%; /* Sol taraftaki 1/3'lük kısım kadar içeriği kaydır */
+        padding: 20px;
+        position: relative; /* .content içindeki pozisyonu kontrol etmek için */
+      }
+
+      .logo {
+        position: fixed;
+        top: -30px;
+        left: -34px;
+        z-index: 1; /* Diğer içeriklerin üzerinde kalmasını sağlar */
+        width: 300px;
+        height: auto;
+        cursor: pointer;
+      }
+
+      .button-container {
+        position: fixed;
+        top: 50%;
+        left: 10%;
+        transform: translate(-50%, -50%);
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+      }
+
+      .button {
+        background-color: transparent; /* Arkası saydam */
+        color: #000000; /* Yazı rengi beyaz */
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        border: none;
+        position: relative;
+        overflow: hidden;
+        font-size: 20px; /* Yazı stili büyüklüğü */
+        font-family: "Monaco", monospace; /* Monospace Monaco fontu */
+      }
+
+      .button:hover {
+        background-color: transparent;
+        color: #fff;
+      }
+
+      .button::before,
+      .button::after {
+        content: "";
+        position: absolute;
+        width: 0;
+        height: 2px;
+        background: #fff;
+        transition: width 0.3s ease;
+      }
+
+      .button::before {
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      .button::after {
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      .button:hover::before,
+      .button:hover::after {
+        width: 50%;
+      }
+
+      .social-icons {
+        position: fixed;
+        top: 75%;
+        left: 10%;
+        transform: translate(-50%, -50%);
+        display: flex;
+        gap: 20px;
+      }
+
+      .social-icon {
+        font-size: 30px;
+        color: #000000; /* Sosyal medya ikon rengi */
+        cursor: pointer;
+      }
+
+      .social-icon:hover {
+        color: #fff; /* Hover rengi */
+      }
+      .alp {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 150px; /* Ayarladığınız genişlik */
+        height: 150px; /* Ayarladığınız yükseklik */
+        object-fit: cover; /* Fotoğrafın oranlarını koru ve taşan kısımları kırp */
+        border-radius: 50%; /* Köşeleri yuvarlak yapar */
+        cursor: pointer;
+      }
+      .yazi {
+        margin-top: 100px;
+        margin-left: -100px;
+        width: 100%;
+        height: auto;
+        text-align: center;
+        line-height: 35px;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+      }
+      .yazi1 {
+        margin-top: 70px;
+        margin-left: -100px;
+        width: 100%;
+        height: auto;
+        text-align: center;
+        line-height: 35px;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+      }
+      .yazi2 {
+        margin-top: 40px;
+        margin-left: -100px;
+        width: 100%;
+        height: auto;
+        text-align: center;
+        line-height: 35px;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+      }
+      .yazi3 {
+        margin-top: 5px;
+        margin-left: -100px;
+        width: 100%;
+        height: auto;
+        text-align: center;
+        line-height: 35px;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+      }
+      .yazi4 {
+      }
+      /* Dil Değiştirme Butonu Stilleri */
+      .language-button {
+        background-color: transparent;
+        color: #000;
+        border: 2px solid #000;
+        padding: 12px 20px; /* Yükseklik biraz artırıldı */
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, color 0.3s ease,
+          border-color 0.3s ease, width 0.3s ease; /* Genişleme efekti için width özelliği eklendi */
+        display: inline-block;
+        position: fixed;
+        top: 100px;
+        right: 20px;
+        overflow: hidden;
+      }
+
+      .language-button span::before,
+      .language-button span::after {
+        content: "";
+        position: absolute;
+        width: 0;
+        height: 2px;
+        background: #000;
+        transition: width 0.3s ease;
+      }
+
+      .language-button span::before {
+        top: 50%;
+        left: 0;
+        transform: translateY(-50%);
+      }
+
+      .language-button span::after {
+        bottom: 50%;
+        right: 0;
+        transform: translateY(50%);
+      }
+
+      .language-button:hover span::before,
+      .language-button:hover span::after {
+        width: 50%;
+      }
+
+      .language-button.active span::before,
+      .language-button.active span::after {
+        width: 50%;
+      }
+
+      .language-button:hover {
+        background-color: #000;
+        color: #fff;
+      }
+
+      .language-button.active {
+        background-color: #000;
+        color: #fff;
+        border-color: #fff;
+      }
+      @media (max-width: 1200px) {
+        /* Large screens (1200px and below) */
+        .content {
+          margin-left: 25%;
+        }
+
+        .title1,
+        .title2,
+        .title3,
+        .title4 {
+          font-size: 40px;
+        }
+
+        .yazi,
+        .yazi1,
+        .yazi2,
+        .yazi3 {
+          font-size: 18px;
+        }
+      }
+
+      @media (max-width: 992px) {
+        /* Medium screens (992px and below) */
+        .content {
+          margin-left: 20%;
+        }
+
+        .title1,
+        .title2,
+        .title3,
+        .title4 {
+          font-size: 35px;
+        }
+
+        .yazi,
+        .yazi1,
+        .yazi2,
+        .yazi3 {
+          font-size: 16px;
+        }
+      }
+
+      @media (max-width: 768px) {
+        /* Small screens (768px and below) */
+        .content {
+          margin-left: 0;
+          padding: 10px;
+        }
+
+        .sidebar {
+          display: none;
+        }
+
+        .button-container {
+          top: 10%;
+          left: 50%;
+          transform: translate(-50%, 0);
+          text-align: center;
+        }
+
+        .button {
+          font-size: 16px;
+        }
+
+        .title1,
+        .title2,
+        .title3,
+        .title4 {
+          font-size: 30px;
+          margin-left: 0;
+        }
+
+        .yazi,
+        .yazi1,
+        .yazi2,
+        .yazi3 {
+          font-size: 14px;
+          margin-left: 0;
+        }
+
+        .logo {
+          width: 200px;
+          left: 50%;
+          top: 5%;
+          transform: translateX(-50%);
+        }
+
+        .social-icons {
+          top: 90%;
+          left: 50%;
+          transform: translate(-50%, 0);
+        }
+
+        .alp {
+          top: 20px;
+          right: 20px;
+          width: 100px;
+          height: 100px;
+        }
+      }
+
+      @media (max-width: 576px) {
+        /* Extra small screens (576px and below) */
+        .content {
+          padding: 10px;
+        }
+
+        .button {
+          font-size: 14px;
+        }
+
+        .title1,
+        .title2,
+        .title3,
+        .title4 {
+          font-size: 25px;
+          margin-left: 0;
+        }
+
+        .yazi,
+        .yazi1,
+        .yazi2,
+        .yazi3 {
+          font-size: 14px;
+          margin-left: 0;
+        }
+
+        .alp {
+          display: none;
+        }
+      }
+      /* Koyu mod stilleri */
+      body.dark-mode {
+        background-color: #222;
+        color: #fff;
+      }
+      /* Koyu mod stilleri */
+      body.dark-mode {
+        background-color: #000000;
+        color: #fff;
+      }
+      .dark-mode .button {
+        color: #fff; /* Koyu mod buton metin rengi */
+      }
+      body.dark-mode .title1,
+      body.dark-mode .title2,
+      body.dark-mode .title3,
+      body.dark-mode .title4 {
+        color: #fff;
+      }
+      .toggle-button {
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        position: fixed;
+        top: 105px;
+        right: -40px;
+      }
+
+      .bulb-icon {
+        width: 40px;
+        height: auto;
+        transition: transform 0.3s ease;
+      }
+
+      .dark-mode .bulb-icon {
+        transform: rotate(180deg);
+      }
+    </style>
+    <title>Alp Eren KIRGİLBOĞA</title>
+    <link rel="icon" href="logo.ico" type="image/x-icon" />
+  </head>
+  <body>
+    <div class="sidebar">
+      <!-- Sol taraftaki fotoğraf burada olacak -->
+      <img src="banner.jpg" alt="Profil Fotoğrafı" class="img-fluid" />
+    </div>
+    <div class="button-container">
+      <p class="yazi4" style="margin-left: 17%">Kişisel Blog</p>
+      <a href="index.html" class="button about-button">Hakkımda</a>
+      <a href="egitim.html" class="button education-button">Eğitim</a>
+      <a href="iletisim.html" class="button contact-button">İletişim</a>
+    </div>
+
+    <div class="content">
+      <!-- Blog içeriği burada olacak -->
+      <a href="index.html">
+        <img src="logo.png" alt="Profil Fotoğrafı" class="logo" />
+      </a>
+      <h1
+        class="title1"
+        style="
+          font-family: 'Arial', sans-serif;
+          font-size: 66px;
+          color: #333;
+          margin-top: 70px;
+          margin-bottom: 10px;
+        "
+      >
+        Alp Eren KIRGİLBOĞA
+      </h1>
+
+      <p class="yazi">
+        Adım Alp Eren Kırgilboğa. 01.12.2003 tarihinde İstanbulda doğdum. Aslen
+        Adanalıyım. Şuan İstanbul Anadolu Yakasında ikamet ediyorum. Bir ablam
+        ve birde küçük kardeşim var. Babam özel bir şirkette annem ise Vakıfbank
+        Genel Müdürlükte çalışıyor. Hedefim Bilgisayar Mühendisliğiydi fakat
+        özel üniversitede okumak istemediğim için PC Programclığı bölümünü
+        yazdım. Şuan 2. sınıf öğrencisiyim. Bu sene DGS sınavına girip
+        Bilgisayar Mühendisliğine tamamlamak istediğim için sınava
+        hazırlanıyorum. Bölümümden/Okulumdan memnunum fakat deprem dolayısıyla
+        dersler online olduğu için üniversitenin ilk yılını evden tamamladım.
+        Online devam etmek benim için pek yararlı olmadı çünkü sınıf ortamında
+        ders görmek bana daha verimli geliyor.Fakat bunların şuan benim için pek
+        bir önemi yok çünkü tamamen DGS sınavına odaklandım ve şuan aklımdaki
+        tek şey Bilgisayar Mühendisliğine tamamlamak.
+      </p>
+      <h1
+        class="title2"
+        style="
+          font-family: 'Arial', sans-serif;
+          font-size: 50px;
+          margin-left: 250px;
+          color: #333;
+          margin-top: 60px;
+          margin-bottom: 10px;
+        "
+      >
+        Hobilerim
+      </h1>
+      <p class="yazi1">
+        Birden fazla Hobim olduğunu söyleyebilirim. Spor olarak Kick Box ve
+        yüzmeyi severim. Bilardoyu severim ama pek oynayamam. Bisiklet sürmek
+        hoşuma gider. Arabalar aşırı ilgimi çeker. Günümünün belirli bir
+        zamanını sarı ilan sitelerinde arabalara ve piyasaya bakmakla harcarım.
+        Yazılımı , bilgisayarla uğraşmayı seviyorum.
+      </p>
+      <h1
+        class="title3"
+        style="
+          font-family: 'Arial', sans-serif;
+          font-size: 50px;
+          margin-left: 250px;
+          color: #333;
+          margin-top: 35px;
+          margin-bottom: 10px;
+        "
+      >
+        Hedeflerim
+      </h1>
+      <p class="yazi2">
+        Şuan hayatım rutin olarak ilerliyor. Fakat aklımda ileriye dair
+        oturmayan şeyler var. Yazılım üzerinde nereye yöneleceğimi henüz karar
+        verememiş durumdayım. Sanırım yapay zeka veya siber üzerine
+        yoğunlaşacağım. Hedefim yurt dışına çıkmak olmasada yabancı firmalarda
+        çalışıp piştikten sonra kendi şirketimi kurmak. Hayallerim hedeflerim
+        var. Bunları gerçekleştirmek için elimden geleni yapacağım. Ekstra
+        olarak araba tutkum var. Arabalarla aram küçüklüğümden bu yana iyi.
+        Hayalimdeki araba Audi RS7. Bir diğer merak ettiğim şey ise Tokyo.
+        Bildiğiniz üzere Japonya'da, JDM (Japonya Dış Pazarı) kültürü, modifiye
+        edilmiş arabalar, hızlı ve performanslı otomobiller ve drift (kontrollü
+        kayma) gibi otomobil tutkunları arasında oldukça yaygındır. Tokyo'daki
+        genç araba tutkunları, performans ve hızın yanı sıra benzersiz ve dikkat
+        çekici modifiye edilmiş araçlarının estetiğiyle de ilgilenirler. Bu
+        ortam benim için oldukça merak verici birşey ve bu yüzden hedeflerimin
+        arasında Tokyo'ya gitmek var.
+      </p>
+      <h1
+        class="title4"
+        style="
+          font-family: 'Arial', sans-serif;
+          font-size: 50px;
+          margin-left: 250px;
+          color: #333;
+          margin-top: 35px;
+          margin-bottom: 10px;
+        "
+      >
+        Tecrübelerim
+      </h1>
+      <p class="yazi3">
+        Lise zamanımda yaz tatillerimde garsonluk yaparak iş hayatına giriş
+        yaptım. Daha sonrasında 06.2022-09.2022 tarihleri arasında Kahve
+        Dünyasında barista rolünde işe girdim ve 3 ay boyunca baristalık yaptım.
+        Sonrasında üniversiteye başladım ve yazılım alanında birkaç küçük
+        projeler yapmaya başladım. Projelerimin bir kısmı GitHub sayfamda
+        mevcut. Linke tıklayarak gidebilirsiniz.
+      </p>
+      <a href="https://github.com/Alpp0" style="margin-left: 290px"
+        >https://github.com/Alpp0</a
+      >
+    </div>
+
+    <div class="social-icons">
+      <a href="https://www.instagram.com/alpkrglbga/" target="_blank">
+        <i class="fab fa-instagram social-icon" title="Instagram"></i>
+      </a>
+      <a href="https://www.linkedin.com/in/alp-eren0" target="_blank">
+        <i class="fab fa-linkedin social-icon" title="LinkedIn"></i>
+      </a>
+      <a href="https://github.com/Alpp0" target="_blank">
+        <i class="fab fa-github social-icon" title="GitHub"></i>
+      </a>
+      <!-- Diğer sosyal medya ikonları buraya eklenir -->
+      <a href="https://twitter.com/alperenkrglbga" target="_blank">
+        <i class="fas fa-times social-icon" title="X"></i>
+      </a>
+      <button class="language-button" onclick="toggleLanguage()">TR</button>
+      <button class="toggle-button" onclick="toggleDarkMode()">
+        <img src="light-bulb.ico" alt="Bulb" class="bulb-icon" />
+      </button>
+    </div>
+
+    <img src="alp.jpg" alt="Alp" class="alp" />
+    <script>
+      var darkMode = false;
+
+      function toggleDarkMode() {
+        darkMode = !darkMode;
+
+        document.body.classList.toggle("dark-mode", darkMode);
+        updateToggleButton();
+      }
+
+      function updateToggleButton() {
+        var bulbIcon = document.querySelector(".bulb-icon");
+        bulbIcon.style.transform = darkMode ? "rotate(180deg)" : "rotate(0deg)";
+      }
+    </script>
+
+    <script>
+      // Koyu Mod Durumunu İzleyen Değişken
+      var darkMode = false;
+
+      function toggleDarkMode() {
+        // Koyu Mod Durumunu Değiştir
+        darkMode = !darkMode;
+
+        // Body Elementine Koyu Mod Sınıfını Ekle veya Kaldır
+        document.body.classList.toggle("dark-mode", darkMode);
+
+        // Koyu Mod Butonunu Güncelle
+        updateDarkModeButton();
+      }
+
+      function updateDarkModeButton() {
+        // Koyu Mod Butonunun Metnini Güncelle
+        var buttonText = darkMode ? "Light Mode" : "Dark Mode";
+        document.querySelector(".dark-mode-button").textContent = buttonText;
+      }
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+      var turkishContent = {
+        yazi: "Adım Alp Eren Kırgilboğa. 01.12.2003 tarihinde İstanbulda doğdum. Aslen Adanalıyım. Şuan İstanbul Anadolu Yakasında ikamet ediyorum. Bir ablam ve birde küçük kardeşim var. Babam özel bir şirkette annem ise Vakıfbank Genel Müdürlükte çalışıyor. Hedefim Bilgisayar Mühendisliğiydi fakat özel üniversitede okumak istemediğim için PC Programclığı bölümünü yazdım. Şuan 2. sınıf öğrencisiyim. Bu sene DGS sınavına girip Bilgisayar Mühendisliğine tamamlamak istediğim için sınava hazırlanıyorum. Bölümümden/Okulumdan memnunum fakat deprem dolayısıyla dersler online olduğu için üniversitenin ilk yılını evden tamamladım. Online devam etmek benim için pek yararlı olmadı çünkü sınıf ortamında ders görmek bana daha verimli geliyor.Fakat bunların şuan benim için pek bir önemi yok çünkü tamamen DGS sınavına odaklandım ve şuan aklımdaki tek şey Bilgisayar Mühendisliğine tamamlamak.",
+        yazi1:
+          "Birden fazla Hobim olduğunu söyleyebilirim. Spor olarak Kick Box ve yüzmeyi severim. Bilardoyu severim ama pek oynayamam. Bisiklet sürmek hoşuma gider. Arabalar aşırı ilgimi çeker. Günümünün belirli bir zamanını sarı ilan sitelerinde arabalara ve piyasaya bakmakla harcarım. Yazılımı , bilgisayarla uğraşmayı seviyorum.",
+        yazi2:
+          "Şuan hayatım rutin olarak ilerliyor. Fakat aklımda ileriye dair oturmayan şeyler var. Yazılım üzerinde nereye yöneleceğimi henüz karar verememiş durumdayım. Sanırım yapay zeka veya siber üzerine yoğunlaşacağım. Hedefim yurt dışına çıkmak olmasada yabancı firmalarda çalışıp piştikten sonra kendi şirketimi kurmak. Hayallerim hedeflerim var. Bunları gerçekleştirmek için elimden geleni yapacağım. Ekstra olarak araba tutkum var. Arabalarla aram küçüklüğümden bu yana iyi. Hayalimdeki araba Audi RS7. Bir diğer merak ettiğim şey ise Tokyo. Bildiğiniz üzere Japonya'da, JDM (Japonya Dış Pazarı) kültürü, modifiye edilmiş arabalar, hızlı ve performanslı otomobiller ve drift (kontrollü kayma) gibi otomobil tutkunları arasında oldukça yaygındır. Tokyo'daki genç araba tutkunları, performans ve hızın yanı sıra benzersiz ve dikkat çekici modifiye edilmiş araçlarının estetiğiyle de ilgilenirler. Bu ortam benim için oldukça merak verici birşey ve bu yüzden hedeflerimin arasında Tokyo'ya gitmek var.",
+        yazi3:
+          "Lise zamanımda yaz tatillerimde garsonluk yaparak iş hayatına giriş yaptım. Daha sonrasında 06.2022-09.2022 tarihleri arasında Kahve Dünyasında barista rolünde işe girdim ve 3 ay boyunca baristalık yaptım. Sonrasında üniversiteye başladım ve yazılım alanında birkaç küçük projeler yapmaya başladım. Projelerimin bir kısmı GitHub sayfamda mevcut. Linke tıklayarak gidebilirsiniz.",
+        yazi4: "Kişisel Blog",
+        title1: "Alp Eren KIRGİLBOĞA",
+        title2: "Hobilerim",
+        title3: "Hedeflerim",
+        title4: "Tecrübelerim",
+      };
+
+      var englishContent = {
+        yazi: "My name is Alp Eren Kırgilboğa. I was born on December 01, 2003, in Istanbul. I am originally from Adana. Currently, I reside on the Anatolian side of Istanbul. I have an elder sister and a younger brother. My father works in a private company, and my mother works at Vakıfbank General Directorate. My initial goal was to study Computer Engineering, but I didn't want to attend a private university, so I chose to study PC Programming. I am currently a second-year student. I am preparing for the DGS exam this year to transfer to Computer Engineering. I am satisfied with my department/school, but due to an earthquake, I completed the first year of university online from home. Online classes were not very beneficial for me because I find learning in a classroom environment more productive. However, these things don't matter much to me now because I am completely focused on the DGS exam, and my only goal right now is to transfer to Computer Engineering.",
+        yazi1:
+          "I can say that I have multiple hobbies. I enjoy sports such as Kickboxing and swimming. I like playing billiards, although I'm not very good at it. I also enjoy riding a bicycle. I have a strong interest in cars. I spend a significant amount of my time checking yellow classified ads for cars and staying updated on the market. I love working with software and computers.",
+        yazi2:
+          "My life is currently progressing in a routine manner. However, there are uncertainties in my mind about the future. I haven't decided yet where to focus on in the field of software. I think I will concentrate on artificial intelligence or cybersecurity. My goal is not to go abroad, but rather to work in foreign companies and establish my own company after gaining experience. I have dreams and goals, and I will do my best to achieve them. Additionally, I have a passion for cars. I have been good with cars since my childhood. My dream car is the Audi RS7. Another thing I am curious about is Tokyo. As you know, in Japan, the culture of JDM (Japanese Domestic Market), modified cars, fast and high-performance vehicles, and drift (controlled sliding) is quite popular among car enthusiasts. Young car enthusiasts in Tokyo are not only interested in performance and speed but also in the aesthetics of unique and attention-grabbing modified cars. This environment is very intriguing for me, and that's why visiting Tokyo is among my goals.",
+        yazi3:
+          "During my high school days, I entered the workforce by working as a waiter during summer vacations. Later, between June 2022 and September 2022, I worked as a barista at Kahve Dünyası for 3 months. After that, I started university and began working on a few small software projects. Some of my projects are available on my GitHub page. You can visit the link by clicking on it.",
+        yazi4: "Personal Blog",
+        title1: "Alp Eren KIRGILBOĞA",
+        title2: "My Hobbies",
+        title3: "My Goals",
+        title4: "My Experiences",
+      };
+
+      var language = "turkish"; // Başlangıçta Türkçe dilini kullan
+
+      function toggleLanguage() {
+        // Dil değiştirme fonksiyonu
+        if (language === "turkish") {
+          applyLanguage(englishContent);
+          language = "english";
+        } else {
+          applyLanguage(turkishContent);
+          language = "turkish";
+        }
+      }
+
+      function applyLanguage(content) {
+        // İlgili dildeki metinleri güncelle
+        $(".yazi").text(content.yazi);
+        $(".yazi1").text(content.yazi1);
+        $(".yazi2").text(content.yazi2);
+        $(".yazi3").text(content.yazi3);
+        $(".yazi4").text(content.yazi4);
+
+        // Başlıkları güncelle
+        $(".title1").text(content.title1);
+        $(".title2").text(content.title2);
+        $(".title3").text(content.title3);
+        $(".title4").text(content.title4);
+
+        // Dil değiştirme butonlarını güncelle
+        $(".about-button").text(
+          language === "turkish" ? "About Me" : "Hakkımda"
+        );
+        $(".education-button").text(
+          language === "turkish" ? "Education" : "Eğitim"
+        );
+        $(".contact-button").text(
+          language === "turkish" ? "Contact" : "İletişim"
+        );
+
+        // Dil değiştirme butonlarını güncelle
+        $(".about-button").text(
+          language === "turkish" ? "About Me" : "Hakkımda"
+        );
+        $(".education-button").text(
+          language === "turkish" ? "Education" : "Eğitim"
+        );
+        $(".contact-button").text(
+          language === "turkish" ? "Contact" : "İletişim"
+        );
+        // Dil değiştirme butonunu güncelle
+        $(".language-button").text(language.toUpperCase());
+      }
+    </script>
+  </body>
+</html>
